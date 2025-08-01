@@ -1,4 +1,5 @@
 using AutoMapper;
+using WebApi.Base.Interfaces;
 using WebApi.Services.Data.Entities;
 using WebApi.Services.DTOs;
 using WebApi.Services.Repositories;
@@ -8,11 +9,13 @@ namespace WebApi.Services.Services;
 public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
 
-    public ProductService(IProductRepository productRepository, IMapper mapper)
+    public ProductService(IProductRepository productRepository, IUnitOfWork unitOfWork, IMapper mapper)
     {
         _productRepository = productRepository;
+        _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
 
@@ -32,9 +35,7 @@ public class ProductService : IProductService
     {
         var product = _mapper.Map<Product>(createProductDto);
         var createdProduct = await _productRepository.AddAsync(product);
-        
-        // Note: In a full implementation, you'd save changes through Unit of Work pattern
-        // For now, we'll assume the context is saved elsewhere or auto-save is enabled
+        await _unitOfWork.SaveChangesAsync();
         
         return _mapper.Map<ProductDto>(createdProduct);
     }
@@ -49,6 +50,7 @@ public class ProductService : IProductService
 
         _mapper.Map(updateProductDto, existingProduct);
         var updatedProduct = await _productRepository.UpdateAsync(existingProduct);
+        await _unitOfWork.SaveChangesAsync();
         
         return _mapper.Map<ProductDto>(updatedProduct);
     }
@@ -62,6 +64,7 @@ public class ProductService : IProductService
         }
 
         await _productRepository.DeleteAsync(id);
+        await _unitOfWork.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<ProductDto>> GetProductsByCategoryAsync(string category)

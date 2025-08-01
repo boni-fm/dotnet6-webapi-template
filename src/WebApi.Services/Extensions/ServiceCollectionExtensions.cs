@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WebApi.Base.Interfaces;
 using WebApi.Services.Data;
 using WebApi.Services.Repositories;
 using WebApi.Services.Services;
@@ -26,6 +27,9 @@ public static class ServiceCollectionExtensions
 
         // Add Repositories
         services.AddScoped<IProductRepository, ProductRepository>();
+
+        // Add Unit of Work
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         // Add Services
         services.AddScoped<IProductService, ProductService>();

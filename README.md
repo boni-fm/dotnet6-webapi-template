@@ -1,146 +1,237 @@
-# .NET 6 Web API Template
+# PostgreSQL Modular Web API Template
 
-A comprehensive and production-ready .NET 6 Web API template featuring clean architecture, best practices, and modern development tools.
+A .NET 6 Web API template with PostgreSQL backend following a modular architecture pattern.
 
 ![.NET 6](https://img.shields.io/badge/.NET-6.0-blue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Build Status](https://github.com/boni-fm/dotnet6-webapi-template/workflows/CI%2FCD%20Pipeline/badge.svg)
 
-## Features
+## Architecture Overview
 
-### 🏗️ Architecture
-- **Clean Architecture** with clear separation of concerns
-- **Domain-Driven Design** principles
-- **SOLID** principles implementation
-- **Repository Pattern** for data access
-- **Service Layer** for business logic
+This template implements a clean, modular architecture with three main projects:
 
-### 🚀 Technologies & Frameworks
-- **.NET 6** - Latest LTS version
-- **Entity Framework Core 6** - ORM with SQL Server support
-- **AutoMapper** - Object-to-object mapping
-- **Serilog** - Structured logging
-- **Swagger/OpenAPI** - API documentation
-- **JWT Authentication** - Secure API endpoints
-- **Health Checks** - Application monitoring
+### 1. WebApi.Host (Minimal Host Project)
+- **Purpose**: Acts as the main entry point and startup configuration
+- **Contents**: Only `Program.cs` and configuration files
+- **Dependencies**: References WebApi.Base and WebApi.Services
+- **Characteristics**: Minimal, clean startup with dependency injection
 
-### 🔧 Development Tools
-- **Docker** support with multi-stage builds
-- **GitHub Actions** CI/CD pipeline
-- **EditorConfig** for consistent code style
-- **Unit & Integration Tests** with xUnit
-- **Code Coverage** reporting
+### 2. WebApi.Base (Shared Foundation)
+- **Purpose**: Provides common functionality and base classes
+- **Contents**:
+  - `BaseApiController` with standardized response patterns
+  - Common interfaces (`IRepository`, `IUnitOfWork`, etc.)
+  - Standard API response models
+  - JWT authentication setup
+  - CORS configuration
+- **Benefits**: Reusable across multiple service modules
 
-### 📊 Built-in Features
-- **CORS** configuration
-- **Exception handling** middleware
-- **Logging** with multiple sinks
-- **Health checks** endpoint
-- **Environment-specific** configurations
-- **Database migrations** support
+### 3. WebApi.Services (Consolidated Business Logic)
+- **Purpose**: Contains all business logic, data access, and endpoints
+- **Contents**:
+  - Entity Framework DbContext with PostgreSQL
+  - Repository pattern implementation
+  - Business services with AutoMapper
+  - Controllers inheriting from BaseApiController
+  - Entity models and configurations
+  - DTOs and mapping profiles
+
+## Key Features
+
+✅ **PostgreSQL Integration** with Npgsql Entity Framework provider  
+✅ **Repository Pattern** with Unit of Work implementation  
+✅ **AutoMapper** for object-to-object mapping  
+✅ **Base Controller** with standardized API responses  
+✅ **JWT Authentication** setup and configuration  
+✅ **Health Checks** for PostgreSQL database  
+✅ **Docker Support** with PostgreSQL container  
+✅ **Modular Design** for easy extension  
+✅ **CORS Configuration** for cross-origin requests  
+✅ **Structured Logging** with Serilog  
+
+## Getting Started
+
+### Prerequisites
+- .NET 6 SDK
+- PostgreSQL 14+ (or Docker)
+- (Optional) pgAdmin or similar PostgreSQL client
+
+### Quick Start with Docker
+
+1. **Clone and navigate to the project**:
+   ```bash
+   git clone <repository-url>
+   cd dotnet6-webapi-template
+   ```
+
+2. **Start with Docker Compose**:
+   ```bash
+   docker-compose up --build
+   ```
+   
+   This will:
+   - Build the API container
+   - Start PostgreSQL container
+   - Apply database migrations (if configured)
+   - Start the API on http://localhost:5000
+
+3. **Access the API**:
+   - Swagger UI: http://localhost:5000/swagger
+   - Health Check: http://localhost:5000/health
+   - Sample API: http://localhost:5000/api/products
+
+### Local Development Setup
+
+1. **Install PostgreSQL** or use Docker:
+   ```bash
+   docker run --name postgres-dev -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=WebApiTemplateDb -p 5432:5432 -d postgres:14-alpine
+   ```
+
+2. **Update connection string** in `src/WebApi.Host/appsettings.Development.json`:
+   ```json
+   {
+     "ConnectionStrings": {
+       "DefaultConnection": "Host=localhost;Database=WebApiTemplateDb_Dev;Username=postgres;Password=postgres;Port=5432"
+     }
+   }
+   ```
+
+3. **Install EF Core tools** (if not already installed):
+   ```bash
+   dotnet tool install --global dotnet-ef
+   ```
+
+4. **Create and apply migrations**:
+   ```bash
+   cd src/WebApi.Services
+   dotnet ef migrations add InitialCreate
+   dotnet ef database update
+   ```
+
+5. **Run the application**:
+   ```bash
+   cd src/WebApi.Host
+   dotnet run
+   ```
 
 ## Project Structure
 
 ```
 src/
-├── DotNet6WebApiTemplate.Api/          # Web API layer
-│   ├── Controllers/                    # API controllers
-│   ├── Extensions/                     # Service registrations
-│   └── Program.cs                      # Application entry point
-├── DotNet6WebApiTemplate.Application/  # Application layer
-│   ├── DTOs/                          # Data transfer objects
-│   ├── Interfaces/                    # Application interfaces
-│   ├── Mappings/                      # AutoMapper profiles
-│   └── Services/                      # Business logic services
-├── DotNet6WebApiTemplate.Domain/       # Domain layer
-│   ├── Entities/                      # Domain entities
-│   ├── Interfaces/                    # Domain interfaces
-│   └── Common/                        # Base classes
-└── DotNet6WebApiTemplate.Infrastructure/ # Infrastructure layer
-    ├── Data/                          # DbContext and configurations
-    └── Repositories/                  # Data access implementations
-
-tests/
-├── DotNet6WebApiTemplate.Tests.Unit/          # Unit tests
-└── DotNet6WebApiTemplate.Tests.Integration/   # Integration tests
+├── WebApi.Host/                    # 🎯 Main entry point (minimal)
+│   ├── Program.cs                  # Startup configuration
+│   ├── appsettings.json           # Production settings
+│   ├── appsettings.Development.json # Development settings
+│   └── WebApi.Host.csproj         # Project file
+├── WebApi.Base/                    # 🛠 Shared foundation
+│   ├── Controllers/
+│   │   └── BaseApiController.cs   # Base controller with common functionality
+│   ├── Models/
+│   │   └── ApiResponse.cs         # Standardized API response models
+│   ├── Interfaces/
+│   │   └── IRepository.cs         # Common interfaces
+│   ├── Extensions/
+│   │   └── ServiceCollectionExtensions.cs # Base service registration
+│   └── WebApi.Base.csproj         # Project file
+└── WebApi.Services/                # 🏗 Business logic & data access
+    ├── Controllers/
+    │   └── ProductsController.cs   # Sample CRUD controller
+    ├── Data/
+    │   ├── ApplicationDbContext.cs # EF Core DbContext
+    │   ├── Entities/              # Domain entities
+    │   └── Configurations/        # EF Core configurations
+    ├── Services/                  # Business logic services
+    ├── Repositories/              # Data access layer
+    ├── DTOs/                      # Data transfer objects
+    ├── Profiles/                  # AutoMapper profiles
+    ├── Extensions/
+    │   └── ServiceCollectionExtensions.cs # Service registration
+    └── WebApi.Services.csproj     # Project file
 ```
 
-## Getting Started
+## Sample API Endpoints
 
-### Prerequisites
+The template includes a complete Product CRUD API as an example:
 
-- [.NET 6 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
-- [SQL Server](https://www.microsoft.com/en-us/sql-server) or [SQL Server LocalDB](https://docs.microsoft.com/en-us/sql/database-engine/configure-windows/sql-server-express-localdb)
-- [Docker](https://www.docker.com/) (optional)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/products` | Get all products |
+| GET | `/api/products/{id}` | Get product by ID |
+| POST | `/api/products` | Create new product |
+| PUT | `/api/products/{id}` | Update existing product |
+| DELETE | `/api/products/{id}` | Delete product |
+| GET | `/api/products/category/{category}` | Get products by category |
+| GET | `/api/products/active` | Get active products only |
 
-### Installation
+### Example Response Format
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/boni-fm/dotnet6-webapi-template.git
-   cd dotnet6-webapi-template
-   ```
+All API responses follow a standardized format:
 
-2. **Restore dependencies**
-   ```bash
-   dotnet restore
-   ```
+```json
+{
+  "success": true,
+  "message": "Products retrieved successfully",
+  "data": [
+    {
+      "id": 1,
+      "name": "Sample Product 1",
+      "description": "This is a sample product for demonstration",
+      "price": 29.99,
+      "quantity": 100,
+      "category": "Electronics",
+      "isActive": true,
+      "createdAt": "2024-01-01T00:00:00Z",
+      "updatedAt": "2024-01-01T00:00:00Z"
+    }
+  ]
+}
+```
 
-3. **Update connection string**
-   
-   Edit `src/DotNet6WebApiTemplate.Api/appsettings.json`:
-   ```json
-   {
-     "ConnectionStrings": {
-       "DefaultConnection": "Your SQL Server connection string here"
-     }
-   }
-   ```
+## Adding New Modules
 
-4. **Run database migrations**
-   ```bash
-   dotnet ef database update --project src/DotNet6WebApiTemplate.Infrastructure --startup-project src/DotNet6WebApiTemplate.Api
-   ```
+The modular design makes it easy to add new features:
 
-5. **Run the application**
-   ```bash
-   dotnet run --project src/DotNet6WebApiTemplate.Api
-   ```
+### 1. Add New Entity and Repository
+```csharp
+// Add to WebApi.Services/Data/Entities/
+public class Customer : BaseEntity
+{
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+}
 
-6. **Access Swagger UI**
-   
-   Navigate to `https://localhost:5001/swagger` (or `http://localhost:5000/swagger`)
+// Add to WebApi.Services/Repositories/
+public interface ICustomerRepository : IRepository<Customer> { }
+public class CustomerRepository : Repository<Customer>, ICustomerRepository { }
+```
 
-### Using Docker
+### 2. Add Service and DTOs
+```csharp
+// Add DTOs in WebApi.Services/DTOs/
+public class CustomerDto { /* properties */ }
 
-1. **Using Docker Compose (Recommended)**
-   ```bash
-   docker-compose up -d
-   ```
-   
-   This will start both the API and SQL Server containers.
+// Add service in WebApi.Services/Services/
+public interface ICustomerService { /* methods */ }
+public class CustomerService : ICustomerService { /* implementation */ }
+```
 
-2. **Build and run manually**
-   ```bash
-   docker build -t dotnet6-webapi-template .
-   docker run -p 5000:80 dotnet6-webapi-template
-   ```
+### 3. Add Controller
+```csharp
+// Add to WebApi.Services/Controllers/
+public class CustomersController : BaseApiController
+{
+    // Inherits standardized response methods
+    // Implement CRUD operations
+}
+```
 
-## API Endpoints
-
-The template includes a sample **Products** resource with full CRUD operations:
-
-| Method | Endpoint           | Description          |
-|--------|--------------------|----------------------|
-| GET    | `/api/products`    | Get all products     |
-| GET    | `/api/products/{id}` | Get product by ID  |
-| POST   | `/api/products`    | Create new product   |
-| PUT    | `/api/products/{id}` | Update product     |
-| DELETE | `/api/products/{id}` | Delete product     |
-
-### Health Check
-
-- **GET** `/health` - Application health status
+### 4. Register Services
+```csharp
+// Update WebApi.Services/Extensions/ServiceCollectionExtensions.cs
+services.AddScoped<ICustomerRepository, CustomerRepository>();
+services.AddScoped<ICustomerService, CustomerService>();
+```
 
 ## Configuration
 
@@ -148,116 +239,76 @@ The template includes a sample **Products** resource with full CRUD operations:
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `ASPNETCORE_ENVIRONMENT` | Environment name | `Development` |
-| `ConnectionStrings__DefaultConnection` | Database connection string | LocalDB connection |
+| `ConnectionStrings__DefaultConnection` | PostgreSQL connection string | See appsettings.json |
+| `JWT__Key` | JWT signing key | (Change in production!) |
+| `JWT__Issuer` | JWT issuer | WebApiTemplate |
+| `JWT__Audience` | JWT audience | WebApiTemplate |
 
-### JWT Configuration
+### Health Checks
 
-Configure JWT settings in `appsettings.json`:
-
-```json
-{
-  "JWT": {
-    "Key": "your-secret-key",
-    "Issuer": "your-issuer",
-    "Audience": "your-audience",
-    "ExpiryInDays": 7
-  }
-}
-```
-
-## Testing
-
-### Run Unit Tests
-```bash
-dotnet test tests/DotNet6WebApiTemplate.Tests.Unit/
-```
-
-### Run Integration Tests
-```bash
-dotnet test tests/DotNet6WebApiTemplate.Tests.Integration/
-```
-
-### Run All Tests
-```bash
-dotnet test
-```
-
-### Generate Code Coverage
-```bash
-dotnet test --collect:"XPlat Code Coverage"
-```
-
-## Database Migrations
-
-### Add a new migration
-```bash
-dotnet ef migrations add MigrationName --project src/DotNet6WebApiTemplate.Infrastructure --startup-project src/DotNet6WebApiTemplate.Api
-```
-
-### Update database
-```bash
-dotnet ef database update --project src/DotNet6WebApiTemplate.Infrastructure --startup-project src/DotNet6WebApiTemplate.Api
-```
-
-### Remove last migration
-```bash
-dotnet ef migrations remove --project src/DotNet6WebApiTemplate.Infrastructure --startup-project src/DotNet6WebApiTemplate.Api
-```
-
-## Deployment
-
-### Docker Deployment
-
-1. **Build the image**
-   ```bash
-   docker build -t your-app-name .
-   ```
-
-2. **Run the container**
-   ```bash
-   docker run -p 8080:80 \
-     -e ConnectionStrings__DefaultConnection="your-connection-string" \
-     your-app-name
-   ```
-
-### CI/CD Pipeline
-
-The template includes a GitHub Actions workflow that:
-
-- Runs tests on multiple .NET versions
-- Builds and pushes Docker images
-- Performs security scans
-- Generates code coverage reports
+Health checks are available at `/health` and include:
+- Database connectivity check
+- Application status
 
 ## Development Guidelines
 
-### Adding New Features
+### Database Migrations
+```bash
+# Add migration
+dotnet ef migrations add <MigrationName> --project src/WebApi.Services
 
-1. **Domain Entity**: Add to `src/DotNet6WebApiTemplate.Domain/Entities/`
-2. **Repository Interface**: Add to `src/DotNet6WebApiTemplate.Domain/Interfaces/`
-3. **Repository Implementation**: Add to `src/DotNet6WebApiTemplate.Infrastructure/Repositories/`
-4. **DTOs**: Add to `src/DotNet6WebApiTemplate.Application/DTOs/`
-5. **Service Interface**: Add to `src/DotNet6WebApiTemplate.Application/Interfaces/`
-6. **Service Implementation**: Add to `src/DotNet6WebApiTemplate.Application/Services/`
-7. **Controller**: Add to `src/DotNet6WebApiTemplate.Api/Controllers/`
-8. **Tests**: Add unit and integration tests
+# Update database
+dotnet ef database update --project src/WebApi.Services
+
+# Remove last migration
+dotnet ef migrations remove --project src/WebApi.Services
+```
+
+### Testing
+```bash
+# Run all tests
+dotnet test
+
+# Run specific test project
+dotnet test tests/WebApiTemplate.Tests.Unit
+```
 
 ### Code Style
+- Follow standard C# conventions
+- Use async/await for all async operations
+- Implement proper error handling
+- Add XML documentation for public APIs
 
-- Follow the `.editorconfig` settings
-- Use meaningful names for classes, methods, and variables
-- Write XML documentation for public APIs
-- Keep methods small and focused
-- Follow SOLID principles
+## Production Deployment
+
+### Docker Production Build
+```dockerfile
+# Build optimized image
+docker build -t webapi-template:latest .
+
+# Run with production settings
+docker run -d \
+  --name webapi-prod \
+  -p 80:80 \
+  -e ASPNETCORE_ENVIRONMENT=Production \
+  -e ConnectionStrings__DefaultConnection="Your-Prod-Connection-String" \
+  webapi-template:latest
+```
+
+### Security Considerations
+- 🔐 Change JWT key in production
+- 🔐 Use secure connection strings
+- 🔐 Enable HTTPS
+- 🔐 Configure proper CORS policies
+- 🔐 Set up authentication/authorization as needed
 
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
 
 ## License
 
@@ -270,12 +321,6 @@ For support and questions:
 - 📧 Email: support@example.com
 - 🐛 Issues: [GitHub Issues](https://github.com/boni-fm/dotnet6-webapi-template/issues)
 - 📖 Documentation: [Wiki](https://github.com/boni-fm/dotnet6-webapi-template/wiki)
-
-## Acknowledgments
-
-- [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) by Robert C. Martin
-- [ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/) documentation
-- [Entity Framework Core](https://docs.microsoft.com/en-us/ef/core/) documentation
 
 ---
 
