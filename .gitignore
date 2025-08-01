@@ -1,0 +1,43 @@
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Bb]in/
+[Oo]bj/
+[Ll]ogs/
+
+# Visual Studio files
+.vscode/
+*.sln.ide
+*.suo
+*.user
+*.userprefs
+*.vs/
+
+# Rider files
+.idea/
+*.sln.iml
+
+# JetBrains Rider
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# User-specific files
+*.sln.user
+*.sln.docstates
+
+# DotNet CLI
+project.lock.json
+project.fragment.lock.json
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+*.nuspec
+*.symbols.nupkg
+**/packages/*
