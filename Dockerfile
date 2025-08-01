@@ -4,10 +4,9 @@ WORKDIR /app
 
 # Copy solution and project files
 COPY *.sln ./
-COPY src/DotNet6WebApiTemplate.Api/*.csproj src/DotNet6WebApiTemplate.Api/
-COPY src/DotNet6WebApiTemplate.Application/*.csproj src/DotNet6WebApiTemplate.Application/
-COPY src/DotNet6WebApiTemplate.Domain/*.csproj src/DotNet6WebApiTemplate.Domain/
-COPY src/DotNet6WebApiTemplate.Infrastructure/*.csproj src/DotNet6WebApiTemplate.Infrastructure/
+COPY src/WebApi.Host/*.csproj src/WebApi.Host/
+COPY src/WebApi.Base/*.csproj src/WebApi.Base/
+COPY src/WebApi.Services/*.csproj src/WebApi.Services/
 
 # Restore dependencies
 RUN dotnet restore
@@ -16,19 +15,20 @@ RUN dotnet restore
 COPY src/ src/
 
 # Build the application
-RUN dotnet build src/DotNet6WebApiTemplate.Api/DotNet6WebApiTemplate.Api.csproj -c Release --no-restore
+RUN dotnet build src/WebApi.Host/WebApi.Host.csproj -c Release --no-restore
 
 # Publish the application
-RUN dotnet publish src/DotNet6WebApiTemplate.Api/DotNet6WebApiTemplate.Api.csproj -c Release -o /app/publish --no-restore
+RUN dotnet publish src/WebApi.Host/WebApi.Host.csproj -c Release -o /app/publish --no-restore
 
 # Runtime stage
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS runtime
 WORKDIR /app
 
-# Install SQL Server tools (optional, for database access)
+# Install PostgreSQL client tools (optional, for database access)
 USER root
 RUN apt-get update && apt-get install -y \
     curl \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # Create app user
@@ -54,4 +54,4 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
     CMD curl -f http://localhost/health || exit 1
 
 # Set entry point
-ENTRYPOINT ["dotnet", "DotNet6WebApiTemplate.Api.dll"]
+ENTRYPOINT ["dotnet", "WebApi.Host.dll"]
