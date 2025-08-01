@@ -1,9 +1,54 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Solution>
-  <Project Sdk="Microsoft.NET.Sdk">
-    <PropertyGroup>
-      <OutputType>Exe</OutputType>
-      <TargetFramework>net6.0</TargetFramework>
-    </PropertyGroup>
-  </Project>
-</Solution>
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet6WebApiTemplate.Api", "src\DotNet6WebApiTemplate.Api\DotNet6WebApiTemplate.Api.csproj", "{8B8B8B8B-8B8B-8B8B-8B8B-8B8B8B8B8B8B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet6WebApiTemplate.Domain", "src\DotNet6WebApiTemplate.Domain\DotNet6WebApiTemplate.Domain.csproj", "{9A9A9A9A-9A9A-9A9A-9A9A-9A9A9A9A9A9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet6WebApiTemplate.Application", "src\DotNet6WebApiTemplate.Application\DotNet6WebApiTemplate.Application.csproj", "{AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet6WebApiTemplate.Infrastructure", "src\DotNet6WebApiTemplate.Infrastructure\DotNet6WebApiTemplate.Infrastructure.csproj", "{BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet6WebApiTemplate.Tests.Unit", "tests\DotNet6WebApiTemplate.Tests.Unit\DotNet6WebApiTemplate.Tests.Unit.csproj", "{CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNet6WebApiTemplate.Tests.Integration", "tests\DotNet6WebApiTemplate.Tests.Integration\DotNet6WebApiTemplate.Tests.Integration.csproj", "{DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8B8B8B8B-8B8B-8B8B-8B8B-8B8B8B8B8B8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B8B8B8B-8B8B-8B8B-8B8B-8B8B8B8B8B8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B8B8B8B-8B8B-8B8B-8B8B-8B8B8B8B8B8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B8B8B8B-8B8B-8B8B-8B8B-8B8B8B8B8B8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A9A9A9A-9A9A-9A9A-9A9A-9A9A9A9A9A9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A9A9A9A-9A9A-9A9A-9A9A-9A9A9A9A9A9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A9A9A9A-9A9A-9A9A-9A9A-9A9A9A9A9A9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A9A9A9A-9A9A-9A9A-9A9A-9A9A9A9A9A9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBBBBBBB-BBBB-BBBB-BBBB-BBBBBBBBBBBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCCCCCCC-CCCC-CCCC-CCCC-CCCCCCCCCCCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDDDDDDD-DDDD-DDDD-DDDD-DDDDDDDDDDDD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {12345678-1234-5678-9ABC-123456789ABC}
+	EndGlobalSection
+EndGlobal
